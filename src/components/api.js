@@ -4,15 +4,6 @@ import axios from 'axios';
 const API_KEY = '20ef87dd82cd47329d443368c9e3fcaa';
 const BASE_URL = 'https://api.spoonacular.com/recipes';
 
-export const fetchRecipesCuisine = async (cuisine = "") => {
-  try {
-    const response = await axios.get(`${BASE_URL}/cuisine=${cuisine}?apiKey=${API_KEY}&number=10`);
-    return response.data.recipes;
-  } catch (error) {
-    console.error('Error fetching recipes:', error);
-    throw error;
-  }
-};
 
 export const fetchRecipes = async () => {
   try {

@@ -106,142 +106,19 @@
 
 
 // screens/HomeScreen.js
-// import React, { useEffect, useState } from 'react';
-// import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
-// import { fetchRecipes } from '../components/api';
-
-// const HomeScreen = ({ navigation }) => {
-//   const [recipes, setRecipes] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const getRecipes = async () => {
-//       try {
-//         const recipesData = await fetchRecipes();
-//         setRecipes(recipesData);
-//       } catch (err) {
-//         setError(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     getRecipes();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <View style={styles.loadingContainer}>
-//         <ActivityIndicator size="large" color="#0000ff" />
-//       </View>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <View style={styles.loadingContainer}>
-//         <Text style={styles.errorText}>Error fetching recipes: {error.message}</Text>
-//       </View>
-//     );
-//   }
-
-//   return (
-//     <FlatList
-//       data={recipes}
-//       keyExtractor={(item) => item.id.toString()}
-//       renderItem={({ item }) => (
-//         <TouchableOpacity
-//           style={styles.card}
-//           onPress={() => navigation.navigate('Details', { id: item.id })}
-//         >
-//           <Image source={{ uri: item.image }} style={styles.image} />
-//           <View style={styles.textContainer}>
-//             <Text style={styles.title}>{item.title}</Text>
-//             <Text style={styles.rating}>Rating: {item.spoonacularScore}</Text>
-//             <Text style={styles.rating}>Servings: {item.servings}</Text>
-//             <Text style={styles.rating}>Preparation time: {item.readyInMinutes} minutes</Text>
-//           </View>
-//         </TouchableOpacity>
-//       )}
-//       contentContainerStyle={styles.listContent}
-//     />
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   loadingContainer: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#f8f8f8',
-//   },
-//   errorText: {
-//     color: 'red',
-//     fontSize: 18,
-//     paddingHorizontal: 20,
-//     textAlign: 'center',
-//   },
-//   listContent: {
-//     padding: 10,
-//     backgroundColor: '#f0f0f0',
-//   },
-//   card: {
-//     flex: 1,
-//     marginVertical: 10,
-//     marginHorizontal: 15,
-//     backgroundColor: '#ffffff',
-//     borderRadius: 15,
-//     overflow: 'hidden',
-//     shadowColor: '#000',
-//     shadowOpacity: 0.2,
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowRadius: 8,
-//     elevation: 5,
-//   },
-//   image: {
-//     width: '100%',
-//     height: 200,
-//     resizeMode: 'cover',
-//   },
-//   textContainer: {
-//     padding: 15,
-//   },
-//   title: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//     color: '#333',
-//     marginBottom: 10,
-//   },
-//   rating: {
-//     fontSize: 16,
-//     color: '#666',
-//     marginBottom: 5,
-//   },
-// });
-
-// export default HomeScreen;
-
-
-// screens/HomeScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { fetchRecipes } from '../components/api';
 
 const HomeScreen = ({ navigation }) => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCuisine, setSelectedCuisine] = useState('All');
-
-  const cuisines = ['All', 'Italian', 'Chinese', 'Indian', 'Mexican', 'French'];
 
   useEffect(() => {
-    const cuisineParam = selectedCuisine === 'All' ? '' : selectedCuisine;
-    const getRecipes = async (cuisineParam) => {
-      setLoading(true);
+    const getRecipes = async () => {
       try {
-        const recipesData = await fetchRecipes(selectedCuisine);
+        const recipesData = await fetchRecipes();
         setRecipes(recipesData);
       } catch (err) {
         setError(err);
@@ -251,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
     };
 
     getRecipes();
-  }, [selectedCuisine]);
+  }, []);
 
   if (loading) {
     return (
@@ -270,56 +147,29 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cuisineScroll}>
-        {cuisines.map((cuisine) => (
-          <TouchableOpacity
-            key={cuisine}
-            style={[
-              styles.cuisineButton,
-              selectedCuisine === cuisine && styles.selectedCuisineButton,
-            ]}
-            onPress={() => setSelectedCuisine(cuisine)}
-          >
-            <Text
-              style={[
-                styles.cuisineText,
-                selectedCuisine === cuisine && styles.selectedCuisineText,
-              ]}
-            >
-              {cuisine}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <FlatList
-        data={recipes}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => navigation.navigate('Details', { id: item.id })}
-          >
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.rating}>Rating: {item.spoonacularScore}</Text>
-              <Text style={styles.rating}>Servings: {item.servings}</Text>
-              <Text style={styles.rating}>Preparation time: {item.readyInMinutes} minutes</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        contentContainerStyle={styles.listContent}
-      />
-    </View>
+    <FlatList
+      data={recipes}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('Details', { id: item.id })}
+        >
+          <Image source={{ uri: item.image }} style={styles.image} />
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.rating}>Rating: {item.spoonacularScore}</Text>
+            <Text style={styles.rating}>Servings: {item.servings}</Text>
+            <Text style={styles.rating}>Preparation time: {item.readyInMinutes} minutes</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      contentContainerStyle={styles.listContent}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f0f0f0',
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -334,6 +184,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 10,
+    backgroundColor: '#f0f0f0',
   },
   card: {
     flex: 1,
@@ -367,35 +218,8 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 5,
   },
-  cuisineScroll: {
-    paddingHorizontal: 10,
-    
-    height: 120,
-  },
-  cuisineButton: {
-    marginTop:50,
-    height: 40,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    marginRight: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  selectedCuisineButton: {
-    backgroundColor: '#ff6347',
-  },
-  cuisineText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  selectedCuisineText: {
-    color: '#fff',
-  },
 });
 
 export default HomeScreen;
+
+
