@@ -35,7 +35,7 @@ Provide any additional instructions or information about using the app.
 
 1. Start the development server:
     ```bash
-    expo start
+    npx expo start
     ```
 2. Follow the instructions in the terminal to run the app on an emulator or a physical device.
 
@@ -47,5 +47,8 @@ Provide any additional instructions or information about using the app.
 ## API 
 You can use the following api keys if the key in the code gets exhausted
 1. b590b3362f4e4b748a035266adbc3774
+2. f417214a05654e7c8ef2d938429bdfda
+3. 6f6c01f0051b4b5ab25fc59240a09d6a
+
 Update the key which is stored in the variable named "API_KEY" at src/components/api.js by using any of the above keys
 
